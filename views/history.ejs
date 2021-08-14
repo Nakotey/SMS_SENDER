@@ -8,10 +8,38 @@
 </head>
 <body>
     <h1>History</h1>
-    <ul>
+
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Message</th>
+            <th>Recipient</th>
+            <th>Action</th>
+        </tr>
+
+        <%
+        if(allMessages.length!=0){
+        let i=1;
+        allMessages.forEach(message => {
+        %>
+        <tr>
+            <td><%=i; %></td>
+            <td><%=message.message %></td>
+            <td><%=message.recipient %></td>
+            <td><a href="#">Edit</a></td>
+            <td><a href="#">Delete</a></td>
+        </tr>
+        <%  i++; }) %>
+        <% } else{ %>
+            <tr>
+                <td colspan="7">No Data Found</td>
+            </tr>
+        <% } %>
+    </table>
+    <!-- <ul>
         <% allMessages.forEach(message => {%>
             <li><%= message.message %></li>
         <%}); %>
-    </ul>
+    </ul> -->
 </body>
 </html>

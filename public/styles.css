@@ -1,8 +1,39 @@
+body {
+    background-color: aliceblue;
+}
+header {
+    background-color: aliceblue
+    padding: 5px;
+    text-align: center;
+  }
+
 h1 {
     text-align: center;
-    color: red;
+    color:aqua;
+    font-family: 'Dancing Script', cursive;
+    font-size: 70px;
 }
 
 .container {
     text-align: center;
+    padding-top: 30px;
+}
+
+label {
+    text-align: left;
+}
+
+input[type="submit"]
+{
+    width: 10em;
+    border-radius: 5px;
+    height: 2em;
+    /* font-size: 18px; */
+}
+
+input[type="submit"]:hover
+{
+    background-color: aqua;
+    color: black;
+    cursor: pointer;
 }
