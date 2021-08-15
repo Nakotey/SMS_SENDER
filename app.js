@@ -132,7 +132,7 @@ app.get('/templates', async (req, res) => {
     try{
      const templates = await pool.query("SELECT message, mobile_no FROM templates");
      const allTemplates = templates.rows;
-     res.render('history', {allTemplates});
+     res.render('template', {allTemplates});
  
     }catch(err){
      console.error(err.message);
