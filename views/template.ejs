@@ -11,7 +11,35 @@
     <title>Templates</title>
 </head>
 <body>
-    <h1>THIS IS FOR TEMPLATES</h1>
+    <h1>Templates</h1>
+
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Message</th>
+            <th>Recipient</th>
+            <th>Action</th>
+        </tr>
+
+        <%
+        if(allTemplates.length!=0){
+        let i=1;
+        allTemplates.forEach(template => {
+        %>
+        <tr>
+            <td><%=i; %></td>
+            <td><%=template.message %></td>
+            <td><%=template.mobile_no %></td>
+            <td><a href="#">Send</a></td>
+            <td><a href="#">Edit</a></td>
+        </tr>
+        <%  i++; }) %>
+        <% } else{ %>
+            <tr>
+                <td colspan="7">No Data Found</td>
+            </tr>
+        <% } %>
+    </table>
     
 </body>
 </html>
