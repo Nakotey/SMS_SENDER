@@ -76,9 +76,9 @@ app.post('/message', async (req, res)=> {
 //get all message
 app.get('/messages', async (req, res) => {
    try{
-    const Messages = await pool.query("SELECT message FROM messages");
+    const Messages = await pool.query("SELECT message, recipient FROM messages");
     const allMessages = Messages.rows;
-     res.render('history', {allMessages});
+    res.render('history', {allMessages});
 
    }catch(err){
     console.error(err.message);
@@ -126,6 +126,18 @@ app.post('/template', async (req, res)=> {
         console.error(err.message);
     }
 });
+
+// get all templates
+app.get('/templates', async (req, res) => {
+    try{
+     const templates = await pool.query("SELECT message, mobile_no FROM templates");
+     const allTemplates = templates.rows;
+     res.render('history', {allTemplates});
+ 
+    }catch(err){
+     console.error(err.message);
+    }
+ });
 
 
 app.listen(port, () => {
