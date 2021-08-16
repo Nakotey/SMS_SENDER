@@ -32,7 +32,7 @@ const sms = africastalking.SMS;
 
 // Routes
 
-// Will render the home page
+// Will render the home/default page
 app.get('/', (req, res) => {
     res.render('index');
     console.log('I am ready for action!!')
@@ -43,6 +43,10 @@ app.post('/message', async (req, res)=> {
     const phoneNumber = req.body.recipient;
         const text = req.body.message;
 
+    if(!phoneNumber || !text){
+        return res.status(400).send('INVALID INPUTS');
+    }
+    
 // create const options with fields to, message and from
     const options = {
     to: phoneNumber,
@@ -66,17 +70,16 @@ app.post('/message', async (req, res)=> {
              [recipient, message]
         );
         res.render('success');
-        // res.json(newMessage.rows[0]);
     }catch(err){
 
         console.error(err.message);
     }
 });
 
-//get all message
+//get all messages
 app.get('/messages', async (req, res) => {
    try{
-    const Messages = await pool.query("SELECT message, recipient FROM messages");
+    const Messages = await pool.query("SELECT msg_id, message, recipient FROM messages");
     const allMessages = Messages.rows;
     res.render('history', {allMessages});
 
@@ -85,26 +88,34 @@ app.get('/messages', async (req, res) => {
    }
 });
 
-//get a message
-app.get('/messages/:id', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const message = await pool.query("SELECT * FROM messages WHERE msg_id = $1", [id]);
-        res.json(message.rows[0]);
-    } catch (err) {
-        console.error(err.message);
-    }
+//Resend a message
+app.get('/:id', async(req, res) => {
+    res.send('We are about to resend');
+})
+
+//Edit a message
+app.get('/messages/:id/edit', async (req, res) => {
+    res.send('We are about editing');
+    // try {
+    //     const {id} = req.params;
+    //     const message = await pool.query("SELECT * FROM messages WHERE msg_id = $1", [id]);
+    //     res.json(message.rows[0]);
+    // } catch (err) {
+    //     console.error(err.message);
+    // }
 })
 
 //update a message
 app.put('/messages/:id', async (req, res) => {
     try {
+        console.log(req.query);
+        console.log(req.params);
         
         const {id} = req.params;
-        const {recipient, message} = req.body;
+        const {recipient, message} = req.query;
         const updateMessage = await pool.query("UPDATE messages SET recipient = $1, message = $2 WHERE msg_id = $3", [recipient, message, id]);
 
-        res.json('Message updated');
+        res.json('Update Succesful');
     } catch (err) {
         console.error(err.message);
     }

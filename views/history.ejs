@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+    />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css" type="text/css">
@@ -12,13 +16,16 @@
 </head>
 <body>
     <h1>History</h1>
+    <a href="/">Home</a>
+
 
     <table>
         <tr>
             <th>No</th>
             <th>Message</th>
             <th>Recipient</th>
-            <th>Action</th>
+            <th colspan="2">Action</th>
+            
         </tr>
 
         <%
@@ -30,8 +37,8 @@
             <td><%=i; %></td>
             <td><%=message.message %></td>
             <td><%=message.recipient %></td>
-            <td><a href="#">Resend</a></td>
-            <td><a href="#">Edit</a></td>
+            <td><a href="/<%= message.msg_id%>"><button>Resend</button></a></td>
+            <td><a href="/messages/<%= message.msg_id%>/edit"><button>Edit</button</a></td>
         </tr>
         <%  i++; }) %>
         <% } else{ %>
@@ -45,5 +52,8 @@
             <li><%= message.message %></li>
         <%}); %>
     </ul> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="main.js"></script>
 </body>
+
 </html>

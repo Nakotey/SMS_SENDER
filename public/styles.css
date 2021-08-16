@@ -1,11 +1,12 @@
 body {
     background-color: aliceblue;
 }
+
 header {
-    background-color: aliceblue
+    background-color: aliceblue;
     padding: 5px;
     text-align: center;
-  }
+}
 
 h1 {
     text-align: center;
@@ -36,4 +37,8 @@ input[type="submit"]:hover
     background-color: aqua;
     color: black;
     cursor: pointer;
+}
+
+a {
+    text-decoration: none;
 }
