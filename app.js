@@ -95,14 +95,14 @@ app.get('/:id', async(req, res) => {
 
 //Edit a message
 app.get('/messages/:id/edit', async (req, res) => {
-    res.send('We are about editing');
-    // try {
-    //     const {id} = req.params;
-    //     const message = await pool.query("SELECT * FROM messages WHERE msg_id = $1", [id]);
-    //     res.json(message.rows[0]);
-    // } catch (err) {
-    //     console.error(err.message);
-    // }
+    try {
+        const {id} = req.params;
+        const message = await pool.query("SELECT message, recipient FROM messages WHERE msg_id = $1", [id]);
+        const messageObject = message.rows[0];
+        res.render('index', {messageObject});
+    } catch (err) {
+        console.error(err.message);
+    }
 })
 
 //update a message
