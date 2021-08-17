@@ -91,7 +91,7 @@ app.get('/messages', async (req, res) => {
 });
 
 //Resend a message
-app.get('/:id', async(req, res) => {
+app.get('message/:id', async(req, res) => {
     res.send('We are about to resend');
 })
 
@@ -142,7 +142,6 @@ app.post('/template', async (req, res)=> {
 
 // get all templates
 app.get('/templates', async (req, res) => {
-    res.render('Yet to create Templates');
     try{
      const templates = await pool.query("SELECT message, mobile_no FROM templates");
      const allTemplates = templates.rows;

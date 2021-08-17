@@ -42,3 +42,8 @@ input[type="submit"]:hover
 a {
     text-decoration: none;
 }
+
+button:hover {
+    background-color: aqua;
+    color: black;
+}

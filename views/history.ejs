@@ -39,7 +39,7 @@
             <td><%=message.message %></td>
             <td><%=message.recipient %></td>
             <td><%=message.date_created %></td>
-            <td><a href="/<%= message.msg_id%>"><button>Resend</button></a></td>
+            <td><a href="/message/<%= message.msg_id%>"><button>Resend</button></a></td>
             <td><a href="/messages/<%= message.msg_id%>/edit"><button>Edit</button</a></td>
         </tr>
         <%  i++; }) %>
