@@ -177,6 +177,52 @@ app.get('/templates', async (req, res) => {
     }
  });
 
+ //resend a template message
+ app.get('/message/:id', async(req, res) => {
+    
+    try {
+        const {id} = req.params;
+        const newMessage = await pool.query("SELECT message, recipient FROM templates WHERE temp_id = $1", [id]);
+        const messageObject = newMessage.rows[0];
+        const phoneNumber = messageObject.recipient;
+        const text = messageObject.message;
+        console.log(phoneNumber);
+        console.log(text);
+
+        // create const options with fields to, message and from
+    const options = {
+        to: phoneNumber,
+        message: text,
+        from: 'NAKO'
+      }
+    
+      sms.send(options).then(info => {
+        // return information from Africa's Talking
+    
+      }).catch(err => {
+        console.log(err);
+      });
+    
+        try{
+            console.log(req.body);
+            const {recipient, message} = req.body;
+            
+            await pool.query(
+                "INSERT INTO templates (recipient, message) VALUES($1, $2) RETURNING *", 
+                 [recipient, message]
+            );
+            res.render('success');
+        }catch(err){
+    
+            console.error(err.message);
+        }
+    
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+
  //Edit a template
  app.get('/templates/:id/edit', async (req, res) => {
     try {

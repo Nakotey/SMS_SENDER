@@ -47,3 +47,7 @@ button:hover {
     background-color: aqua;
     color: black;
 }
+
+.img-container {
+    margin: 10rem auto;
+}
