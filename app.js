@@ -96,9 +96,9 @@ app.get('/message/:id', async(req, res) => {
     
     try {
         const {id} = req.params;
-        const newMessage = await pool.query("SELECT message, mobile_no FROM templates WHERE temp_id = $1", [id]);
+        const newMessage = await pool.query("SELECT message, recipient FROM messages WHERE msg_id = $1", [id]);
         const messageObject = newMessage.rows[0];
-        const phoneNumber = messageObject.mobile_no;
+        const phoneNumber = messageObject.recipient;
         const text = messageObject.message;
         console.log(phoneNumber);
         console.log(text);
@@ -119,11 +119,11 @@ app.get('/message/:id', async(req, res) => {
     
         try{
             console.log(req.body);
-            const {mobile_no, message} = req.body;
+            const {recipient, message} = req.body;
             
             await pool.query(
                 "INSERT INTO messages (recipient, message) VALUES($1, $2) RETURNING *", 
-                 [mobile_no, message]
+                 [recipient, message]
             );
             res.render('success');
         }catch(err){
