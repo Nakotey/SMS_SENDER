@@ -4,11 +4,13 @@ const cors = require('cors');
 const pool = require('./models/db');
 const ejs = require('ejs');
 const bodyParser = require('body-parser');
+const expressLayouts = require('express-ejs-layouts');
 
 const port = 5000;
 //Static files
 app.use(express.static('./public'));
 app.use('/css', express.static(__dirname + 'public/css'));
+app.use(expressLayouts);
 
 //Set templating engine
 app.set('view engine', 'ejs');
@@ -99,7 +101,7 @@ app.get('/messages/:id/edit', async (req, res) => {
         const {id} = req.params;
         const message = await pool.query("SELECT message, recipient FROM messages WHERE msg_id = $1", [id]);
         const messageObject = message.rows[0];
-        res.render('index', {messageObject});
+        res.render('newIndex', {messageObject});
     } catch (err) {
         console.error(err.message);
     }
