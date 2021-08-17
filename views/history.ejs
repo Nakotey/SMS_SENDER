@@ -24,6 +24,7 @@
             <th>No</th>
             <th>Message</th>
             <th>Recipient</th>
+            <th>Date</th>
             <th colspan="2">Action</th>
             
         </tr>
@@ -37,6 +38,7 @@
             <td><%=i; %></td>
             <td><%=message.message %></td>
             <td><%=message.recipient %></td>
+            <td><%=message.date_created %></td>
             <td><a href="/<%= message.msg_id%>"><button>Resend</button></a></td>
             <td><a href="/messages/<%= message.msg_id%>/edit"><button>Edit</button</a></td>
         </tr>

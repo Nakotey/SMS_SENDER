@@ -81,7 +81,7 @@ app.post('/message', async (req, res)=> {
 //get all messages
 app.get('/messages', async (req, res) => {
    try{
-    const Messages = await pool.query("SELECT msg_id, message, recipient FROM messages");
+    const Messages = await pool.query("SELECT msg_id, message, recipient, date_created FROM messages");
     const allMessages = Messages.rows;
     res.render('history', {allMessages});
 
@@ -108,32 +108,32 @@ app.get('/messages/:id/edit', async (req, res) => {
 })
 
 //update a message
-app.put('/messages/:id', async (req, res) => {
-    try {
-        console.log(req.query);
-        console.log(req.params);
+// app.put('/messages/:id', async (req, res) => {
+//     try {
+//         console.log(req.query);
+//         console.log(req.params);
         
-        const {id} = req.params;
-        const {recipient, message} = req.query;
-        const updateMessage = await pool.query("UPDATE messages SET recipient = $1, message = $2 WHERE msg_id = $3", [recipient, message, id]);
+//         const {id} = req.params;
+//         const {recipient, message} = req.query;
+//         const updateMessage = await pool.query("UPDATE messages SET recipient = $1, message = $2 WHERE msg_id = $3", [recipient, message, id]);
 
-        res.json('Update Succesful');
-    } catch (err) {
-        console.error(err.message);
-    }
-})
+//         res.json('Update Succesful');
+//     } catch (err) {
+//         console.error(err.message);
+//     }
+// })
 
 //create a template
 app.post('/template', async (req, res)=> {
     try{
         console.log(req.body);
         const {recipient, message} = req.body;
-        const newTemplate = await pool.query(
+        await pool.query(
             "INSERT INTO templates (message, mobile_no) VALUES($1, $2) RETURNING *", 
              [message, recipient]
         );
 
-        res.json(newTemplate.rows[0]);
+        res.render('success');
     }catch(err){
 
         console.error(err.message);
@@ -142,6 +142,7 @@ app.post('/template', async (req, res)=> {
 
 // get all templates
 app.get('/templates', async (req, res) => {
+    res.render('Yet to create Templates');
     try{
      const templates = await pool.query("SELECT message, mobile_no FROM templates");
      const allTemplates = templates.rows;
