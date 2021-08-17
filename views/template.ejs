@@ -34,9 +34,9 @@
         <tr>
             <td><%=i; %></td>
             <td><%=template.message %></td>
-            <td><%=template.mobile_no %></td>
+            <td><%=template.recipient %></td>
             <td><a href="#"><button>Send</button></a></td>
-            <td><a href="#"><button>Edit</button></a></td>
+            <td><a href="/templates/<%=template.temp_id%>/edit"><button>Edit</button></a></td>
         </tr>
         <%  i++; }) %>
         <% } else{ %>

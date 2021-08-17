@@ -67,7 +67,7 @@ app.post('/message', async (req, res)=> {
         console.log(req.body);
         const {recipient, message} = req.body;
         
-        const newMessage = await pool.query(
+        await pool.query(
             "INSERT INTO messages (recipient, message) VALUES($1, $2) RETURNING *", 
              [recipient, message]
         );
@@ -90,9 +90,50 @@ app.get('/messages', async (req, res) => {
    }
 });
 
+
 //Resend a message
-app.get('message/:id', async(req, res) => {
-    res.send('We are about to resend');
+app.get('/message/:id', async(req, res) => {
+    
+    try {
+        const {id} = req.params;
+        const newMessage = await pool.query("SELECT message, mobile_no FROM templates WHERE temp_id = $1", [id]);
+        const messageObject = newMessage.rows[0];
+        const phoneNumber = messageObject.mobile_no;
+        const text = messageObject.message;
+        console.log(phoneNumber);
+        console.log(text);
+
+        // create const options with fields to, message and from
+    const options = {
+        to: phoneNumber,
+        message: text,
+        from: 'NAKO'
+      }
+    
+      sms.send(options).then(info => {
+        // return information from Africa's Talking
+        console.log(info)
+      }).catch(err => {
+        console.log(err);
+      });
+    
+        try{
+            console.log(req.body);
+            const {mobile_no, message} = req.body;
+            
+            await pool.query(
+                "INSERT INTO messages (recipient, message) VALUES($1, $2) RETURNING *", 
+                 [mobile_no, message]
+            );
+            res.render('success');
+        }catch(err){
+    
+            console.error(err.message);
+        }
+    
+    } catch (err) {
+        console.error(err.message);
+    }
 })
 
 //Edit a message
@@ -106,22 +147,6 @@ app.get('/messages/:id/edit', async (req, res) => {
         console.error(err.message);
     }
 })
-
-//update a message
-// app.put('/messages/:id', async (req, res) => {
-//     try {
-//         console.log(req.query);
-//         console.log(req.params);
-        
-//         const {id} = req.params;
-//         const {recipient, message} = req.query;
-//         const updateMessage = await pool.query("UPDATE messages SET recipient = $1, message = $2 WHERE msg_id = $3", [recipient, message, id]);
-
-//         res.json('Update Succesful');
-//     } catch (err) {
-//         console.error(err.message);
-//     }
-// })
 
 //create a template
 app.post('/template', async (req, res)=> {
@@ -143,7 +168,7 @@ app.post('/template', async (req, res)=> {
 // get all templates
 app.get('/templates', async (req, res) => {
     try{
-     const templates = await pool.query("SELECT message, mobile_no FROM templates");
+     const templates = await pool.query("SELECT temp_id, message, recipient FROM templates");
      const allTemplates = templates.rows;
      res.render('template', {allTemplates});
  
@@ -151,6 +176,18 @@ app.get('/templates', async (req, res) => {
      console.error(err.message);
     }
  });
+
+ //Edit a template
+ app.get('/templates/:id/edit', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const message = await pool.query("SELECT message, recipient FROM templates WHERE temp_id = $1", [id]);
+        const messageObject = message.rows[0];
+        res.render('newIndex', {messageObject});
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
 
 app.listen(port, () => {

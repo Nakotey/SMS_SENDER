@@ -10,6 +10,6 @@ CREATE TABLE messages(
 CREATE TABLE templates(
     temp_id SERIAL PRIMARY KEY,
     message VARCHAR(800),
-    mobile_no VARCHAR(15),
+    recipient VARCHAR(15),
     date_created timestamp
 );
