@@ -5,6 +5,8 @@ const pool = require('./models/db');
 const ejs = require('ejs');
 const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
+const message = require('./controllers/message');
+const template = require('./controllers/template');
 
 const port = 5000;
 //Static files
@@ -20,6 +22,8 @@ app.use(cors());
 app.use(express.json()); // to grab message body with req.body encoded as JSON
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.urlencoded({extended:false}));
+app.use(message);
+app.use(template);
 
 // Init africastalking
 const credentials = {
@@ -40,200 +44,6 @@ app.get('/', (req, res) => {
     console.log('I am ready for action!!')
 });
 
-//create a message
-app.post('/message', async (req, res)=> {
-    const phoneNumber = req.body.recipient;
-        const text = req.body.message;
-
-    if(!phoneNumber || !text){
-        return res.status(400).send('INVALID INPUTS');
-    }
-    
-// create const options with fields to, message and from
-    const options = {
-    to: phoneNumber,
-    message: text,
-    from: 'NAKO'
-  }
-
-  sms.send(options).then(info => {
-    // return information from Africa's Talking
-    console.log(info)
-  }).catch(err => {
-    console.log(err);
-  });
-
-    try{
-        console.log(req.body);
-        const {recipient, message} = req.body;
-        
-        await pool.query(
-            "INSERT INTO messages (recipient, message) VALUES($1, $2) RETURNING *", 
-             [recipient, message]
-        );
-        res.render('success');
-    }catch(err){
-
-        console.error(err.message);
-    }
-});
-
-//get all messages
-app.get('/messages', async (req, res) => {
-   try{
-    const Messages = await pool.query("SELECT msg_id, message, recipient, date_created FROM messages");
-    const allMessages = Messages.rows;
-    res.render('history', {allMessages});
-
-   }catch(err){
-    console.error(err.message);
-   }
-});
-
-
-//Resend a message
-app.get('/message/:id', async(req, res) => {
-    
-    try {
-        const {id} = req.params;
-        const newMessage = await pool.query("SELECT message, recipient FROM messages WHERE msg_id = $1", [id]);
-        const messageObject = newMessage.rows[0];
-        const phoneNumber = messageObject.recipient;
-        const text = messageObject.message;
-        console.log(phoneNumber);
-        console.log(text);
-
-        // create const options with fields to, message and from
-    const options = {
-        to: phoneNumber,
-        message: text,
-        from: 'NAKO'
-      }
-    
-      sms.send(options).then(info => {
-        // return information from Africa's Talking
-        console.log(info)
-      }).catch(err => {
-        console.log(err);
-      });
-    
-        try{
-            console.log(req.body);
-            const {recipient, message} = req.body;
-            
-            await pool.query(
-                "INSERT INTO messages (recipient, message) VALUES($1, $2) RETURNING *", 
-                 [recipient, message]
-            );
-            res.render('success');
-        }catch(err){
-    
-            console.error(err.message);
-        }
-    
-    } catch (err) {
-        console.error(err.message);
-    }
-})
-
-//Edit a message
-app.get('/messages/:id/edit', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const message = await pool.query("SELECT message, recipient FROM messages WHERE msg_id = $1", [id]);
-        const messageObject = message.rows[0];
-        res.render('newIndex', {messageObject});
-    } catch (err) {
-        console.error(err.message);
-    }
-})
-
-//create a template
-app.post('/template', async (req, res)=> {
-    try{
-        console.log(req.body);
-        const {recipient, message} = req.body;
-        await pool.query(
-            "INSERT INTO templates (message, mobile_no) VALUES($1, $2) RETURNING *", 
-             [message, recipient]
-        );
-
-        res.render('success');
-    }catch(err){
-
-        console.error(err.message);
-    }
-});
-
-// get all templates
-app.get('/templates', async (req, res) => {
-    try{
-     const templates = await pool.query("SELECT temp_id, message, recipient FROM templates");
-     const allTemplates = templates.rows;
-     res.render('template', {allTemplates});
- 
-    }catch(err){
-     console.error(err.message);
-    }
- });
-
- //resend a template message
- app.get('/message/:id', async(req, res) => {
-    
-    try {
-        const {id} = req.params;
-        const newMessage = await pool.query("SELECT message, recipient FROM templates WHERE temp_id = $1", [id]);
-        const messageObject = newMessage.rows[0];
-        const phoneNumber = messageObject.recipient;
-        const text = messageObject.message;
-        console.log(phoneNumber);
-        console.log(text);
-
-        // create const options with fields to, message and from
-    const options = {
-        to: phoneNumber,
-        message: text,
-        from: 'NAKO'
-      }
-    
-      sms.send(options).then(info => {
-        // return information from Africa's Talking
-    
-      }).catch(err => {
-        console.log(err);
-      });
-    
-        try{
-            console.log(req.body);
-            const {recipient, message} = req.body;
-            
-            await pool.query(
-                "INSERT INTO templates (recipient, message) VALUES($1, $2) RETURNING *", 
-                 [recipient, message]
-            );
-            res.render('success');
-        }catch(err){
-    
-            console.error(err.message);
-        }
-    
-    } catch (err) {
-        console.error(err.message);
-    }
-})
-
-
- //Edit a template
- app.get('/templates/:id/edit', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const message = await pool.query("SELECT message, recipient FROM templates WHERE temp_id = $1", [id]);
-        const messageObject = message.rows[0];
-        res.render('newIndex', {messageObject});
-    } catch (err) {
-        console.error(err.message);
-    }
-})
 
 
 app.listen(port, () => {
