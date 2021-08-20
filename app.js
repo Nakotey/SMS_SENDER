@@ -8,7 +8,7 @@ const expressLayouts = require('express-ejs-layouts');
 const message = require('./controllers/message');
 const template = require('./controllers/template');
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 //Static files
 app.use(express.static('./public'));
 app.use('/css', express.static(__dirname + 'public/css'));
