@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json()); // to grab message body with req.body encoded as JSON
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.urlencoded({extended:false}));
-app.use(message);
+app.use('/', message);
 app.use(template);
 
 // Init africastalking
