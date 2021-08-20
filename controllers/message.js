@@ -48,7 +48,7 @@ router.post('/message', async (req, res)=> {
         res.render('success');
     }catch(err){
 
-        console.log(err.message);
+        console.error(err.message);
     }
 });
 
