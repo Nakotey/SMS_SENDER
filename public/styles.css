@@ -4,7 +4,7 @@ body {
 
 header {
     background-color: aliceblue;
-    padding: 5px;
+    padding: 2px;
     text-align: center;
 }
 
@@ -17,7 +17,7 @@ h1 {
 
 .container {
     text-align: center;
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 label {
