@@ -9,6 +9,16 @@ const expressLayouts = require('express-ejs-layouts');
 const message = require('./controllers/message');
 const template = require('./controllers/template');
 
+const key = process.env.APIKEY;
+const name = process.env.apiUsername;
+
+const credentials = {
+    apiKey: key,
+    username: name
+}
+
+const africastalking = require('africastalking')(credentials);
+const sms = africastalking.SMS;
 
 const port = process.env.PORT || 5000;
 //Static files

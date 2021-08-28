@@ -3,15 +3,19 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../models/db');
 
+const key = process.env.APIKEY;
+const name = process.env.apiUsername;
+
 const credentials = {
-    apiKey: process.env.apiKey,
-    username: process.env.username
+    apiKey: key,
+    username: name
 }
 
 const africastalking = require('africastalking')(credentials);
 
 // initialize AT's SMS service
 const sms = africastalking.SMS
+
 
 //create a template
 router.post('/template', async (req, res)=> {
