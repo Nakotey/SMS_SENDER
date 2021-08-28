@@ -1,14 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const pool = require('../models/db');
 
-// Init africastalking
 const credentials = {
-    apiKey: '7f042e8e88c0bf4afb6ac1f4a49e8556aaad31cefbe66eac766350bc3eed86b6',
-    username: 'sandbox' // username is sandbox for sandbox applications
-  }
+    apiKey: process.env.apiKey,
+    username: process.env.username
+}
 
 const africastalking = require('africastalking')(credentials);
+
 
 // initialize AT's SMS service
 const sms = africastalking.SMS;

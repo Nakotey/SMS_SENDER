@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -7,6 +8,7 @@ const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 const message = require('./controllers/message');
 const template = require('./controllers/template');
+
 
 const port = process.env.PORT || 5000;
 //Static files
@@ -24,17 +26,6 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.urlencoded({extended:false}));
 app.use('/', message);
 app.use('/', template);
-
-// Init africastalking
-const credentials = {
-    apiKey: '7f042e8e88c0bf4afb6ac1f4a49e8556aaad31cefbe66eac766350bc3eed86b6',
-    username: 'sandbox' // username is sandbox for sandbox applications
-  }
-
-const africastalking = require('africastalking')(credentials);
-
-// initialize AT's SMS service
-const sms = africastalking.SMS;
 
 // Routes
 
